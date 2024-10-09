@@ -3,7 +3,7 @@ const initialTravellers = [
   {
     id: 1,
     name: 'Jack',
-    phone: 88885555,
+    phone: '88885555',
     bookingTime: new Date(),
     email: 'jack@example.com',
     status: 'booked'
@@ -11,7 +11,7 @@ const initialTravellers = [
   {
     id: 2,
     name: 'Rose',
-    phone: 88884444,
+    phone: '88884444',
     bookingTime: new Date(),
     email: 'rose@example.com',
     status: 'booked'
@@ -19,7 +19,7 @@ const initialTravellers = [
   {
     id: 3,
     name: 'Tom',
-    phone: 88883333,
+    phone: '88883333',
     bookingTime: new Date(),
     email: 'tom@example.com',
     status: 'confirmed'
@@ -27,7 +27,7 @@ const initialTravellers = [
   {
     id: 4,
     name: 'Amy',
-    phone: 88882222,
+    phone: '88882222',
     bookingTime: new Date(),
     email: 'amy@example.com',
     status: 'cancelled'
@@ -35,7 +35,7 @@ const initialTravellers = [
   {
     id: 5,
     name: 'Mike',
-    phone: 88881111,
+    phone: '88881111',
     bookingTime: new Date(),
     email: 'mike@example.com',
     status: 'booked'
@@ -127,6 +127,7 @@ class Homepage extends React.Component {
 	return (
 	<div>
 		{/*Q2. Placeholder for Homepage code that shows free seats visually.*/}
+    <h2>Homepage</h2>
 	</div>);
 	}
 }
@@ -141,6 +142,7 @@ class TicketToRide extends React.Component {
   setSelector(value)
   {
   	/*Q2. Function to set the value of component selector variable based on user's button click.*/
+    this.setState({ selector: value });
   }
   componentDidMount() {
     this.loadData();
@@ -159,13 +161,46 @@ class TicketToRide extends React.Component {
   deleteTraveller(passenger) {
 	  /*Q5. Write code to delete a passenger from the traveller state variable.*/
   }
+  renderComponent() {
+    console.log("Current Selector:", this.state.selector);
+    switch (this.state.selector) {
+      case 1:
+        console.log('in homepage');
+        console.log(this.state.travellers);
+        return <Homepage travellers={this.state.travellers} />;
+  
+      case 2:
+        return <Add onAdd={this.bookTraveller} />;
+      case 3:
+        return <Delete onDelete={this.deleteTraveller} />;
+      case 4:
+        return <Display travellers={this.state.travellers} />;
+      default:
+        return <Homepage />;
+    }
+  }
+
   render() {
     return (
-      <div>
-        <h1>Ticket To Ride</h1>
-	<div>
+        <div>
+        <h1>Ticket To Ride as</h1>
+	      <div>
+          
 	    {/*Q2. Code for Navigation bar. Use basic buttons to create a nav bar. Use states to manage selection.*/}
-	</div>
+          <button onClick={() => this.setSelector(1)}>Home</button>
+          <button onClick={() => this.setSelector(2)}>Add</button>
+          <button onClick={() => this.setSelector(3)}>Delete</button>
+          <button onClick={() => this.setSelector(4)}>Display</button>
+
+          {/* {this.state.selector === 1 && <Homepage />}
+          {this.state.selector === 2 && <Add onAdd={this.bookTraveller} />}
+          {this.state.selector === 3 && <Delete onDelete={this.deleteTraveller} />}
+          {this.state.selector === 4 && <Display travellers={this.state.travellers} />}       */}
+ 
+          <div>
+            {this.renderComponent()}
+          </div>
+	      </div>
 	<div>
 		{/*Only one of the below four divisions is rendered based on the button clicked by the user.*/}
 		{/*Q2 and Q6. Code to call Instance that draws Homepage. Homepage shows Visual Representation of free seats.*/}
