@@ -1,14 +1,47 @@
 /*Q1. JS Variable needs to be created here. Below variable is just an example. Try to add more attributes.*/
 const initialTravellers = [
   {
-    id: 1, name: 'Jack', phone: 88885555,
+    id: 1,
+    name: 'Jack',
+    phone: 88885555,
     bookingTime: new Date(),
+    email: 'jack@example.com',
+    status: 'booked'
   },
   {
-    id: 2, name: 'Rose', phone: 88884444,
+    id: 2,
+    name: 'Rose',
+    phone: 88884444,
     bookingTime: new Date(),
+    email: 'rose@example.com',
+    status: 'booked'
+  },
+  {
+    id: 3,
+    name: 'Tom',
+    phone: 88883333,
+    bookingTime: new Date(),
+    email: 'tom@example.com',
+    status: 'confirmed'
+  },
+  {
+    id: 4,
+    name: 'Amy',
+    phone: 88882222,
+    bookingTime: new Date(),
+    email: 'amy@example.com',
+    status: 'cancelled'
+  },
+  {
+    id: 5,
+    name: 'Mike',
+    phone: 88881111,
+    bookingTime: new Date(),
+    email: 'mike@example.com',
+    status: 'booked'
   },
 ];
+
 
 
 function TravellerRow(props) {
