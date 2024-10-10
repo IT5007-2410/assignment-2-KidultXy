@@ -54,6 +54,9 @@ function TravellerRow(props) {
       <td>{traveller.email}</td>
       <td>{traveller.seatNumber}</td>
       <td>{traveller.bookingTime.toString()}</td>
+      <td>
+        <button onClick={() => props.deleteTraveller(traveller.name)}>Delete</button>
+      </td>
     </tr>
 
 	  
@@ -64,7 +67,7 @@ function Display(props) {
   
 	/*Q3. Write code to render rows of table, reach corresponding to one traveller. Make use of the TravellerRow function that draws one row.*/
   const travellerRows = props.travellers.map((traveller) => (
-    <TravellerRow key={traveller.id} traveller={traveller} />
+    <TravellerRow key={traveller.id} traveller={traveller} deleteTraveller={props.deleteTraveller} />
   ));
   
   return (
@@ -78,6 +81,7 @@ function Display(props) {
           <th>Email</th>
           <th>Seat Number</th>
           <th>Booking Time</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -176,23 +180,43 @@ class Add extends React.Component {
 }
 
 
-
 class Delete extends React.Component {
   constructor() {
     super();
+    // this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = { name: '' };
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+  handleChange(e) {
+    this.setState({ name: e.target.value });
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     /*Q5. Fetch the passenger details from the deletion form and call deleteTraveller()*/
+    if (this.state.name.trim()) {
+      this.props.deleteTraveller(this.state.name.trim());
+      this.setState({ name: '' });
+    } else {
+      alert("Please enter a valid name.");
+    }
   }
+
 
   render() {
     return (
       <form name="deleteTraveller" onSubmit={this.handleSubmit}>
 	    {/*Q5. Placeholder form to enter information on which passenger's ticket needs to be deleted. Below code is just an example.*/}
-	<input type="text" name="travellername" placeholder="Name" />
-        <button>Delete</button>
+	      {/* <input type="text" name="travellername" placeholder="Name" /> */}
+        <input type="text"
+          name="travellername"
+          value={this.state.name}
+          onChange={this.handleChange}
+          placeholder="Enter traveller's name"
+          required
+        />
+        <button type="submit">Delete</button>
       </form>
     );
   }
@@ -306,6 +330,19 @@ class TicketToRide extends React.Component {
 
   deleteTraveller(passenger) {
 	  /*Q5. Write code to delete a passenger from the traveller state variable.*/
+    this.setState((prevState) => {
+      const updatedTravellers = prevState.travellers.filter(
+        (traveller) => traveller.name.toLowerCase() !== passenger.toLowerCase()
+      );
+
+      if (updatedTravellers.length === prevState.travellers.length) {
+        alert(`No traveller found with the name "${passenger}".`);
+        return null; // No state update needed
+      } else {
+        alert(`Traveller "${passenger}" has been removed.`);
+        return { travellers: updatedTravellers };
+      }
+    });
   }
 
   render() {
@@ -324,7 +361,7 @@ class TicketToRide extends React.Component {
 		      {/*Q2 and Q6. Code to call Instance that draws Homepage. Homepage shows Visual Representation of free seats.*/}
           {this.state.selector === 1 && <Homepage freeSeats={this.state.totalSeats - this.state.travellers.length} />}
           {/*Q3. Code to call component that Displays Travellers.*/}
-          {this.state.selector === 2 && <Display travellers={this.state.travellers} />}
+          {this.state.selector === 2 && <Display travellers={this.state.travellers} deleteTraveller={this.deleteTraveller}/>}
           {/*Q4. Code to call the component that adds a traveller.*/}
           {this.state.selector === 3 && <Add bookTraveller={this.bookTraveller} />}
           {/*Q5. Code to call the component that deletes a traveller based on a given attribute.*/}
