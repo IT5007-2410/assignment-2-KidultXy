@@ -1,0 +1,128 @@
+
+body {
+font-family: Arial, sans-serif;
+line-height: 1.6;
+color: #333;
+max-width: 800px;
+margin: 0 auto;
+padding: 20px;
+background-color: #f4f4f4;
+}
+
+/* 导航栏样式 */
+.navbar {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    background-color: #e5ebf0; /* 背景颜色 */
+    padding: 20px 0; /* 上下内边距 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+}
+
+/* 导航栏按钮样式 */
+.navbar button {
+margin: 0 10px; /* 按钮之间的水平间距 */
+padding: 10px 30px; /* 按钮的内边距，增加长度 */
+font-size: 16px; /* 按钮文本大小 */
+background-color: #007bff; /* 按钮背景颜色 */
+color: white; /* 按钮文字颜色 */
+border: none; /* 去除默认边框 */
+border-radius: 4px; /* 圆角边框 */
+cursor: pointer; /* 鼠标悬停时的光标样式 */
+transition: background-color 0.3s ease; /* 背景颜色过渡效果 */
+}
+
+/* 按钮悬停效果 */
+.navbar button:hover {
+background-color: #0056b3; /* 悬停时的背景颜色 */
+}
+
+
+.mainContainer {
+padding: 20px;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影效果 */ 
+background-color: #f8f9fa; /* 背景颜色 */
+
+}
+
+
+h1 {
+text-align: center;
+color: #2c3e50;
+margin-bottom: 30px;
+}
+
+h2 {
+color: #34495e;
+}
+
+button {
+background-color: #3498db;
+color: white;
+border: none;
+padding: 10px 15px;
+margin: 5px;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s;
+}
+
+button:hover {
+background-color: #2980b9;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  form input {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+
+input[type="text"],
+input[type="tel"],
+input[type="email"] {
+width: 100%;
+padding: 8px;
+margin-bottom: 10px;
+border: 1px solid #ddd;
+border-radius: 4px;
+}
+
+.bordered-table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 20px;
+background-color: white;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bordered-table th,
+.bordered-table td {
+border: 1px solid #ddd;
+padding: 12px;
+text-align: left;
+}
+
+.bordered-table th {
+background-color: #3498db;
+color: white;
+}
+
+.bordered-table tr:nth-child(even) {
+background-color: #f2f2f2;
+}
+
+.bordered-table tr:hover {
+background-color: #e6e6e6;
+}
+
+
+/* table.bordered-table th, td {border: 1px solid silver; padding: 4px;}
+table.bordered-table {border-collapse: collapse;} */

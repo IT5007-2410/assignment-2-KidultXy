@@ -42,8 +42,6 @@ const initialTravellers = [
   },
 ];
 
-
-
 function TravellerRow(props) {
   const traveller = props.traveller;
   {/*Q3. Placeholder to initialize local variable based on traveller prop.*/}
@@ -73,7 +71,7 @@ function Display(props) {
     <table className="bordered-table">
       <thead>
         <tr>
-	  {/*Q3. Below table is just an example. Add more columns based on the traveller attributes you choose.*/}
+	        {/*Q3. Below table is just an example. Add more columns based on the traveller attributes you choose.*/}
           <th>ID</th>
           <th>Name</th>
           <th>Phone</th>
@@ -93,24 +91,90 @@ function Display(props) {
 class Add extends React.Component {
   constructor() {
     super();
+    this.state = {
+      name: '',
+      phone: '',
+      email: '',
+      seatNumber: '',
+    };
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    /*Q4. Fetch the passenger details from the add form and call bookTraveller()*/
+    if (this.validateForm()) {
+      this.props.bookTraveller(this.state);
+      this.setState({ name: '', phone: '', email: '', seatNumber: '' });
+    }
+  }
+
+  validateForm() {
+    const { name, phone, email, seatNumber } = this.state;
+    if (name.trim().length < 2 || name.trim().length > 50) {
+      alert("Name must be between 2 and 50 characters.");
+      return false;
+    }
+    if (!/^\d{10}$/.test(phone.trim())) {
+      alert("Phone number must be 10 digits.");
+      return false;
+    }
+    if (!/\S+@\S+\.\S+/.test(email.trim())) {
+      alert("Please enter a valid email address.");
+      return false;
+    }
+    if (!/^[A-Z]\d{1,2}$/.test(seatNumber.trim().toUpperCase())) {
+      alert("Seat number must be in the format 'A1', 'B2', etc.");
+      return false;
+    }
+    return true;
   }
 
   render() {
     return (
       <form name="addTraveller" onSubmit={this.handleSubmit}>
-	    {/*Q4. Placeholder to enter passenger details. Below code is just an example.*/}
-        <input type="text" name="travellername" placeholder="Name" />
-        <button>Add</button>
+        <input
+          type="text"
+          name="name"
+          value={this.state.name}
+          onChange={this.handleChange}
+          placeholder="Name"
+          required
+        />
+        <input
+          type="tel"
+          name="phone"
+          value={this.state.phone}
+          onChange={this.handleChange}
+          placeholder="Phone (10 digits)"
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          value={this.state.email}
+          onChange={this.handleChange}
+          placeholder="Email"
+          required
+        />
+        <input
+          type="text"
+          name="seatNumber"
+          value={this.state.seatNumber}
+          onChange={this.handleChange}
+          placeholder="Seat Number (e.g., A1)"
+          required
+        />
+        <button type="submit">Add</button>
       </form>
     );
   }
 }
+
 
 
 class Delete extends React.Component {
@@ -175,8 +239,70 @@ class TicketToRide extends React.Component {
   }
 
   bookTraveller(passenger) {
-	    /*Q4. Write code to add a passenger to the traveller state variable.*/
+    // Check if there are available seats
+    if (this.state.travellers.length >= this.state.totalSeats) {
+      alert("Sorry, all seats are booked!");
+      return;
+    }
+
+    // Validate passenger data
+    if (!this.validatePassenger(passenger)) {
+      return;
+    }
+
+    this.setState((prevState) => {
+      const newTraveller = {
+        id: prevState.travellers.length + 1,
+        name: passenger.name.trim(),
+        phone: passenger.phone.trim(),
+        email: passenger.email.trim(),
+        seatNumber: passenger.seatNumber.trim().toUpperCase(),
+        bookingTime: new Date()
+      };
+
+      return {
+        travellers: [...prevState.travellers, newTraveller]
+      };
+    }, () => {
+      console.log('New traveller added:', passenger);
+      alert(`Booking confirmed for ${passenger.name}`);
+    });
   }
+
+  validatePassenger(passenger) {
+    // Name validation
+    if (passenger.name.trim().length < 2 || passenger.name.trim().length > 50) {
+      alert("Name must be between 2 and 50 characters.");
+      return false;
+    }
+
+    // Phone validation (simple check for now)
+    if (!/^\d{10}$/.test(passenger.phone.trim())) {
+      alert("Phone number must be 10 digits.");
+      return false;
+    }
+
+    // Email validation
+    if (!/\S+@\S+\.\S+/.test(passenger.email.trim())) {
+      alert("Please enter a valid email address.");
+      return false;
+    }
+
+    // Seat number validation (assuming format like 'A1', 'B2', etc.)
+    if (!/^[A-Z]\d{1,2}$/.test(passenger.seatNumber.trim().toUpperCase())) {
+      alert("Seat number must be in the format 'A1', 'B2', etc.");
+      return false;
+    }
+
+    // Check if seat is already taken
+    if (this.state.travellers.some(t => t.seatNumber === passenger.seatNumber.trim().toUpperCase())) {
+      alert("This seat is already taken. Please choose another seat.");
+      return false;
+    }
+
+    return true;
+  }
+
 
   deleteTraveller(passenger) {
 	  /*Q5. Write code to delete a passenger from the traveller state variable.*/
@@ -186,25 +312,24 @@ class TicketToRide extends React.Component {
     return (
         <div>
         <h1>Ticket To Ride as</h1>
-	      <div>
+	      <div className="navbar">
 	    {/*Q2. Code for Navigation bar. Use basic buttons to create a nav bar. Use states to manage selection.*/}
           <button onClick={() => this.setSelector(1)}>Home</button>
           <button onClick={() => this.setSelector(2)}>Display</button>
           <button onClick={() => this.setSelector(3)}>Add</button>
           <button onClick={() => this.setSelector(4)}>Delete</button>
+          </div>
+          <div className="mainContainer">
+          {/*Only one of the below four divisions is rendered based on the button clicked by the user.*/}
+		      {/*Q2 and Q6. Code to call Instance that draws Homepage. Homepage shows Visual Representation of free seats.*/}
           {this.state.selector === 1 && <Homepage freeSeats={this.state.totalSeats - this.state.travellers.length} />}
+          {/*Q3. Code to call component that Displays Travellers.*/}
           {this.state.selector === 2 && <Display travellers={this.state.travellers} />}
+          {/*Q4. Code to call the component that adds a traveller.*/}
           {this.state.selector === 3 && <Add bookTraveller={this.bookTraveller} />}
+          {/*Q5. Code to call the component that deletes a traveller based on a given attribute.*/}
           {this.state.selector === 4 && <Delete deleteTraveller={this.deleteTraveller} />}
-	      </div>
-	<div>
-		{/*Only one of the below four divisions is rendered based on the button clicked by the user.*/}
-		{/*Q2 and Q6. Code to call Instance that draws Homepage. Homepage shows Visual Representation of free seats.*/}
-		{/*Q3. Code to call component that Displays Travellers.*/}
-		
-		{/*Q4. Code to call the component that adds a traveller.*/}
-		{/*Q5. Code to call the component that deletes a traveller based on a given attribute.*/}
-	</div>
+          </div>
       </div>
     );
   }
