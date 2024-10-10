@@ -223,16 +223,60 @@ class Delete extends React.Component {
 }
 
 class Homepage extends React.Component {
-	constructor() {
-	super();
+	constructor(props) {
+	super(props);
 	}
+  renderSeats() {
+    const { occupiedSeats } = this.props;
+    const rows = 5;
+    const columns = ['A', 'B'];
+    const seats = [];
+
+    for (let row = 1; row <= rows; row++) {
+      for (let col of columns) {
+        const seatNumber = `${col}${row}`;
+        const isOccupied = occupiedSeats.includes(seatNumber);
+        
+        seats.push(
+          <div 
+            key={seatNumber}
+            className={`seat ${isOccupied ? 'occupied' : 'free'}`}
+            title={seatNumber}
+          >
+            {seatNumber}
+          </div>
+        );
+      }
+    }
+
+    return seats;
+  }
+
 	render(){
 	return (
 	<div>
 		{/*Q2. Placeholder for Homepage code that shows free seats visually.*/}
     <h2>Homepage</h2>
-    <p>Free Seats: {this.props.freeSeats}</p>
-	</div>);
+    <div className="seating-chart-container">
+          <div className="legend">
+            <div className="legend-item">
+              <div className="seat-sample free"></div>
+              <span>Free Seat</span>
+            </div>
+            <div className="legend-item">
+              <div className="seat-sample occupied"></div>
+              <span>Occupied Seat</span>
+            </div>
+          </div>
+          <div className="seating-chart">
+            {this.renderSeats()}
+          </div>
+          <p>Free Seats: {this.props.freeSeats} | Occupied Seats: {this.props.totalSeats-this.props.freeSeats}</p>
+        </div>
+    </div>
+    
+      
+    );
 	}
 }
 class TicketToRide extends React.Component {
@@ -348,7 +392,7 @@ class TicketToRide extends React.Component {
   render() {
     return (
         <div>
-        <h1>Ticket To Ride as</h1>
+        <h1>Ticket To Ride</h1>
 	      <div className="navbar">
 	    {/*Q2. Code for Navigation bar. Use basic buttons to create a nav bar. Use states to manage selection.*/}
           <button onClick={() => this.setSelector(1)}>Home</button>
@@ -359,7 +403,10 @@ class TicketToRide extends React.Component {
           <div className="mainContainer">
           {/*Only one of the below four divisions is rendered based on the button clicked by the user.*/}
 		      {/*Q2 and Q6. Code to call Instance that draws Homepage. Homepage shows Visual Representation of free seats.*/}
-          {this.state.selector === 1 && <Homepage freeSeats={this.state.totalSeats - this.state.travellers.length} />}
+          {this.state.selector === 1 && <Homepage 
+          freeSeats={this.state.totalSeats - this.state.travellers.length} 
+          totalSeats={this.state.totalSeats}
+          occupiedSeats={this.state.travellers.map(t => t.seatNumber)}/>}
           {/*Q3. Code to call component that Displays Travellers.*/}
           {this.state.selector === 2 && <Display travellers={this.state.travellers} deleteTraveller={this.deleteTraveller}/>}
           {/*Q4. Code to call the component that adds a traveller.*/}
