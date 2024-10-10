@@ -27,7 +27,7 @@ cd /home/it5007/
 
 - **Traveller Management:** Add, display, and delete travellers locally.
 - **Navigation:** Switch between components using a navigation bar.
-- **Seat Visualization:** View reserved (orange) and available (green) seats.
+- **Seat Visualization:** View reserved (grey) and available (green) seats.
 - **Real-time Updates:** Instant updates on reservations and seat counts.
 
 ## Installation

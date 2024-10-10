@@ -232,21 +232,40 @@ class Homepage extends React.Component {
     const columns = ['A', 'B'];
     const seats = [];
 
+    // Render column headers
+    seats.push(
+      <div key="column-headers" className="column-headers">
+        <div className="seat-placeholder"></div>
+        {columns.map(col => (
+          <div key={col} className="column-header">{col}</div>
+        ))}
+      </div>
+    );
+
+    // Render rows
     for (let row = 1; row <= rows; row++) {
+      const rowSeats = [
+        <div key={`row-${row}`} className="row-number">{row}</div>
+      ];
+
       for (let col of columns) {
         const seatNumber = `${col}${row}`;
         const isOccupied = occupiedSeats.includes(seatNumber);
         
-        seats.push(
+        rowSeats.push(
           <div 
             key={seatNumber}
             className={`seat ${isOccupied ? 'occupied' : 'free'}`}
             title={seatNumber}
-          >
-            {seatNumber}
-          </div>
+          ></div>
         );
       }
+
+      seats.push(
+        <div key={`row-${row}-container`} className="seat-row">
+          {rowSeats}
+        </div>
+      );
     }
 
     return seats;
