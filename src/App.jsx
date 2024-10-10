@@ -5,58 +5,70 @@ const initialTravellers = [
     name: 'Jack',
     phone: '88885555',
     bookingTime: new Date(),
+    seatNumber: 'A1',
     email: 'jack@example.com',
-    status: 'booked'
   },
   {
     id: 2,
     name: 'Rose',
     phone: '88884444',
     bookingTime: new Date(),
+    seatNumber: 'B2',
     email: 'rose@example.com',
-    status: 'booked'
   },
   {
     id: 3,
     name: 'Tom',
     phone: '88883333',
     bookingTime: new Date(),
+    seatNumber:'A5',
     email: 'tom@example.com',
-    status: 'confirmed'
   },
   {
     id: 4,
     name: 'Amy',
     phone: '88882222',
     bookingTime: new Date(),
+    seatNumber:'B1',
     email: 'amy@example.com',
-    status: 'cancelled'
   },
   {
     id: 5,
     name: 'Mike',
     phone: '88881111',
     bookingTime: new Date(),
+    seatNumber:'B3',
     email: 'mike@example.com',
-    status: 'booked'
   },
 ];
 
 
 
 function TravellerRow(props) {
+  const traveller = props.traveller;
   {/*Q3. Placeholder to initialize local variable based on traveller prop.*/}
   return (
     <tr>
-	  {/*Q3. Placeholder for rendering one row of a table with required traveller attribute values.*/}
+      {/*Q3. Placeholder for rendering one row of a table with required traveller attribute values.*/}
+      <td>{traveller.id}</td>
+      <td>{traveller.name}</td>
+      <td>{traveller.phone}</td>
+      <td>{traveller.email}</td>
+      <td>{traveller.seatNumber}</td>
+      <td>{traveller.bookingTime.toString()}</td>
     </tr>
+
+	  
   );
 }
 
 function Display(props) {
   
 	/*Q3. Write code to render rows of table, reach corresponding to one traveller. Make use of the TravellerRow function that draws one row.*/
-
+  const travellerRows = props.travellers.map((traveller) => (
+    <TravellerRow key={traveller.id} traveller={traveller} />
+  ));
+  
   return (
     <table className="bordered-table">
       <thead>
@@ -65,10 +77,13 @@ function Display(props) {
           <th>ID</th>
           <th>Name</th>
           <th>Phone</th>
+          <th>Email</th>
+          <th>Seat Number</th>
           <th>Booking Time</th>
         </tr>
       </thead>
       <tbody>
+        {travellerRows}
         {/*Q3. write code to call the JS variable defined at the top of this function to render table rows.*/}
       </tbody>
     </table>
@@ -174,10 +189,9 @@ class TicketToRide extends React.Component {
 	      <div>
 	    {/*Q2. Code for Navigation bar. Use basic buttons to create a nav bar. Use states to manage selection.*/}
           <button onClick={() => this.setSelector(1)}>Home</button>
-          <button onClick={() => this.setSelector(2)}>Add</button>
-          <button onClick={() => this.setSelector(3)}>Delete</button>
-          <button onClick={() => this.setSelector(4)}>Display</button>
-
+          <button onClick={() => this.setSelector(2)}>Display</button>
+          <button onClick={() => this.setSelector(3)}>Add</button>
+          <button onClick={() => this.setSelector(4)}>Delete</button>
           {this.state.selector === 1 && <Homepage freeSeats={this.state.totalSeats - this.state.travellers.length} />}
           {this.state.selector === 2 && <Display travellers={this.state.travellers} />}
           {this.state.selector === 3 && <Add bookTraveller={this.bookTraveller} />}
