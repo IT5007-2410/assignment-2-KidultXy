@@ -45,7 +45,7 @@ cd /home/it5007/
 
 3. **Start the Application**
    ```bash
-    npm install
+    npm start
    ```
 
 Open http://localhost:3000 in your browser.
